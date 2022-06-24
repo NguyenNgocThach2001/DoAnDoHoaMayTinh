@@ -68,11 +68,11 @@ class Loop {
         var ax = new THREE.Vector3(0, 1, 0);
         var ay = new THREE.Vector3(1, 0, 0);
         var az = new THREE.Vector3(0, 0, 1);
-        if(FLIPP == 1)
-            this.camera.rotateAroundWorldAxis(p,ax,1 * delta) ;
-        this.camera.rotateAroundWorldAxis(p,az,1 * delta) ;
-        if(FLIPP == 1)
-            this.camera.rotateAroundWorldAxis(p,ay,1 * delta) ;
+        // if(FLIPP == 1)
+        //     this.camera.rotateAroundWorldAxis(p,ax,1 * delta) ;
+        // this.camera.rotateAroundWorldAxis(p,az,1 * delta) ;
+        // if(FLIPP == 1)
+        //     this.camera.rotateAroundWorldAxis(p,ay,1 * delta) ;
     }
 }
 export { Loop }
