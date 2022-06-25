@@ -1,6 +1,8 @@
 import { createCamera } from '../JsModule/Camera.js';
 import { createCube } from '../JsWorld/Cube.js';
+import { createSphere } from '../JsWorld/Sphere.js';
 import { createCylinder } from '../JsWorld/Cylinder.js';
+import { createWheel} from '../JsWorld/Wheel.js';
 import { createCone } from '../JsWorld/Cone.js';
 import { createScene } from '../JsModule/Scene.js';
 import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/loaders/GLTFLoader.js";
@@ -27,9 +29,11 @@ class World {
     loop = new Loop(camera, scene, renderer, controls);
     container.append(renderer.domElement);
 
-    const cube = createCube(5);
-    const cone = createCone(5,0,0,0,5);
-    const cylinder = createCylinder(5, 0, 0, 0 ,5);
+    const sphere = createSphere(1,0,0,0,100);
+    const cube = createCube(5, 0, 0 , 0);
+    const cone = createCone(1,0,30,0,5);
+    const cylinder = createCylinder(1, 0, 0, 30 ,5);
+    const wheels = createWheel();
     // const cube1 = createCube1();
     // const cube2 = createCube();
     // const cube3 = createCube2();
@@ -57,9 +61,11 @@ class World {
     // scene.add(cube2);
     // scene.add(human);
 
+    // scene.add(sphere);
     // scene.add(cube);
-    scene.add(cone);
+    // scene.add(cone);
     // scene.add(cylinder);
+    scene.add(wheels);
     const resizer = new Resizer(container, camera, renderer);
     resizer.onResize = () => {
       this.render();
