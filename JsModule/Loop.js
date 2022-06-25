@@ -58,7 +58,7 @@ class Loop {
         this.controls.update();
         for (const object of this.updatables) {
             if(object.tick != null)
-                object.tick(delta, flip, FLIPP, this.updatables[1].position);
+                object.tick(delta, flip, FLIPP, this.updatables[1]);
         }
 
         var p = new THREE.Vector3(0, 0, 0);

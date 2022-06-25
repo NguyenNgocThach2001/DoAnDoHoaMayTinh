@@ -1,4 +1,5 @@
 import { createCamera } from '../JsModule/Camera.js';
+import { createTeapot} from '../JsWorld/Teapot.js';
 import { createCube } from '../JsWorld/Cube.js';
 import { createSphere } from '../JsWorld/Sphere.js';
 import { createCylinder } from '../JsWorld/Cylinder.js';
@@ -29,11 +30,12 @@ class World {
     loop = new Loop(camera, scene, renderer, controls);
     container.append(renderer.domElement);
 
-    const sphere = createSphere(1,0,0,0,100);
+    const sphere = createSphere(5, 30, 30, 0, 0);
     const cube = createCube(5, 0, 0 , 0);
     const cone = createCone(1,0,30,0,5);
     const cylinder = createCylinder(1, 0, 0, 30 ,5);
     const wheels = createWheel();
+    const teapot = createTeapot();
     // const cube1 = createCube1();
     // const cube2 = createCube();
     // const cube3 = createCube2();
@@ -65,7 +67,11 @@ class World {
     // scene.add(cube);
     // scene.add(cone);
     // scene.add(cylinder);
-    scene.add(wheels);
+    // scene.add(wheels);
+    
+    loop.updatables.push(teapot);
+    scene.add(teapot);
+
     const resizer = new Resizer(container, camera, renderer);
     resizer.onResize = () => {
       this.render();

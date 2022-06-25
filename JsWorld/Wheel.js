@@ -5,7 +5,7 @@ function createWheel(r=10, cx=0, cy=0, cz=0, step = 100, l = 3, r1 = 7, r2 = 6, 
     const material = new THREE.MeshBasicMaterial({
         color:0xffffff,
         side: THREE.DoubleSide,
-        // wireframe: true,
+        wireframe: true,
     });
     const vertices = [];
     
