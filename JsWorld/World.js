@@ -6,7 +6,6 @@ import { createCylinder } from '../JsWorld/Cylinder.js';
 import { createWheel} from '../JsWorld/Wheel.js';
 import { createCone } from '../JsWorld/Cone.js';
 import { createScene } from '../JsModule/Scene.js';
-import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/loaders/GLTFLoader.js";
 import { createRenderer } from '../JsModule/Renderer.js';
 import { Resizer } from '../JsModule/Resizer.js';
 import { createHuman} from './Human.js';
@@ -23,7 +22,7 @@ let controlsGUI;
 
 class World {
   constructor(container) {
-    camera = createCamera();
+    camera = createCamera(35, 1, 0.1, 2000);
     scene = createScene();
     renderer = createRenderer();
     controls = new OrbitControls(camera, renderer.domElement);
@@ -97,9 +96,14 @@ class World {
       rotationX : 0,
       rotationY : 0,
       rotationZ : 0,
+      positionX : 0,
+      positionY : 0,
+      positionZ : 0,
       scaleX: 1,
       scaleY: 1,
       scaleZ: 1,
+      near: 0.1,
+      far: 2000,
     };
     const gui = new dat.GUI();
     gui.add(this.controlsGUI, 'rotationX', 0, 360).onChange(value => {
@@ -115,6 +119,19 @@ class World {
       this.render();
     });
 
+    gui.add(this.controlsGUI, 'positionX', -1000, 1000).onChange(value => {
+      teapot.position.x = this.convertDegToRad(value);
+      this.render();
+    });
+    gui.add(this.controlsGUI, 'positionY', -1000, 1000).onChange(value => {
+      teapot.position.y = this.convertDegToRad(value);
+      this.render();
+    });
+    gui.add(this.controlsGUI, 'positionZ', -1000, 1000).onChange(value => {
+      teapot.position.z = this.convertDegToRad(value);
+      this.render();
+    });
+
     gui.add(this.controlsGUI, 'scaleX', -10, 10).onChange(value => {
       teapot.scale.x = value;
       this.render();
@@ -127,10 +144,41 @@ class World {
       teapot.scale.z = value;
       this.render();
     });
+    const minMaxGUIHelper = new MinMaxGUIHelper(camera, 'near', 'far', 0.1);
+    gui.add(minMaxGUIHelper, 'min', 0.00001, 50, 0.00001).name('near').onChange(this.updateCamera);
+    gui.add(minMaxGUIHelper, 'max', 0.1, 50, 0.1).name('far').onChange(this.updateCamera);
   }
+
+  updateCamera() {
+    camera.updateProjectionMatrix();
+  }
+  
   convertDegToRad(deg) {
     return deg * Math.PI / 180;
+  }
 }
+
+class MinMaxGUIHelper {
+  constructor(obj, minProp, maxProp, minDif) {
+    this.obj = obj;
+    this.minProp = minProp;
+    this.maxProp = maxProp;
+    this.minDif = minDif;
+  }
+  get min() {
+    return this.obj[this.minProp];
+  }
+  set min(v) {
+    this.obj[this.minProp] = v;
+    this.obj[this.maxProp] = Math.max(this.obj[this.maxProp], v + this.minDif);
+  }
+  get max() {
+    return this.obj[this.maxProp];
+  }
+  set max(v) {
+    this.obj[this.maxProp] = v;
+    this.min = this.min;  // this will call the min setter
+  }
 }
 
 export { World };
