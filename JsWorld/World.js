@@ -19,6 +19,7 @@ let renderer;
 let scene;
 let loop;
 let controls;
+let controlsGUI;
 
 class World {
   constructor(container) {
@@ -69,7 +70,8 @@ class World {
     // scene.add(cylinder);
     // scene.add(wheels);
     
-    loop.updatables.push(teapot);
+    this.createGUIDAT(teapot);
+    //loop.updatables.push(teapot);
     scene.add(teapot);
 
     const resizer = new Resizer(container, camera, renderer);
@@ -90,6 +92,45 @@ class World {
     loop.stop();
   }
 
+  createGUIDAT(teapot){
+    this.controlsGUI = {
+      rotationX : 0,
+      rotationY : 0,
+      rotationZ : 0,
+      scaleX: 1,
+      scaleY: 1,
+      scaleZ: 1,
+    };
+    const gui = new dat.GUI();
+    gui.add(this.controlsGUI, 'rotationX', 0, 360).onChange(value => {
+      teapot.rotation.x = this.convertDegToRad(value);
+      this.render();
+    });
+    gui.add(this.controlsGUI, 'rotationY', 0, 360).onChange(value => {
+      teapot.rotation.y = this.convertDegToRad(value);
+      this.render();
+    });
+    gui.add(this.controlsGUI, 'rotationZ', 0, 360).onChange(value => {
+      teapot.rotation.z = this.convertDegToRad(value);
+      this.render();
+    });
+
+    gui.add(this.controlsGUI, 'scaleX', -10, 10).onChange(value => {
+      teapot.scale.x = value;
+      this.render();
+    });
+    gui.add(this.controlsGUI, 'scaleY', -10, 10).onChange(value => {
+      teapot.scale.y = value;
+      this.render();
+    });
+    gui.add(this.controlsGUI, 'scaleZ', -10, 10).onChange(value => {
+      teapot.scale.z = value;
+      this.render();
+    });
+  }
+  convertDegToRad(deg) {
+    return deg * Math.PI / 180;
+}
 }
 
 export { World };
