@@ -105,6 +105,11 @@ class World {
       near: 0.1,
       far: 2000,
     };
+    var displayModeGUI = {
+      wireframe: false,
+      solid: true
+    };
+
     const gui = new dat.GUI();
     gui.add(this.controlsGUI, 'rotationX', 0, 360).onChange(value => {
       teapot.rotation.x = this.convertDegToRad(value);
@@ -147,7 +152,93 @@ class World {
     const minMaxGUIHelper = new MinMaxGUIHelper(camera, 'near', 'far', 0.1);
     gui.add(minMaxGUIHelper, 'min', 0.00001, 50, 0.00001).name('near').onChange(this.updateCamera);
     gui.add(minMaxGUIHelper, 'max', 0.1, 50, 0.1).name('far').onChange(this.updateCamera);
+    var first = gui.addFolder("Display Mode");
+    var pos1 = first.add(displayModeGUI, 'wireframe').name('Wireframe').listen().onChange(function(){setChecked("wireframe"); setWireframe(teapot);});
+    var neg1 = first.add(displayModeGUI, 'solid').name('Solid').listen().onChange(function(){setChecked("solid"); setSolid(teapot);});
+    function setChecked(prop){
+      for (let param in displayModeGUI){
+        displayModeGUI[param] = false;
+      }
+        displayModeGUI[prop] = true;
+    }
+    function setWireframe(teapot) {
+      teapot.getObjectByName('Body').material = new THREE.MeshBasicMaterial({
+        color:0xc4c4c4,
+        side: THREE.DoubleSide,
+        wireframe: true,
+        point:true
+      });
+
+      teapot.getObjectByName('Head').material = new THREE.MeshBasicMaterial({
+        color:0xd4d4d4,
+        side: THREE.DoubleSide,
+        wireframe: true,
+        point:true
+      });
+
+      teapot.getObjectByName('TopHead').material = new THREE.MeshBasicMaterial({
+        color:0xe4e4e4,
+        side: THREE.DoubleSide,
+        wireframe: true,
+        point:true
+      });
+
+        
+      teapot.getObjectByName('Tail').material = new THREE.MeshBasicMaterial({
+        color:0xd4d4d4,
+        side: THREE.DoubleSide,
+        wireframe: true,
+        point:true
+      });
+
+      teapot.getObjectByName('Gunn').material = new THREE.MeshBasicMaterial({
+        color:0xd4d4d4,
+        side: THREE.DoubleSide,
+        wireframe: true,
+        point:true
+      });
+    }
+  
+    function setSolid(teapot){
+      teapot.getObjectByName('Body').material = new THREE.MeshBasicMaterial({
+        color:0xc4c4c4,
+        side: THREE.DoubleSide,
+        wireframe: false,
+        point:true
+      });
+
+      teapot.getObjectByName('Head').material = new THREE.MeshBasicMaterial({
+        color:0xd4d4d4,
+        side: THREE.DoubleSide,
+        wireframe: false,
+        point:true
+      });
+
+      teapot.getObjectByName('TopHead').material = new THREE.MeshBasicMaterial({
+        color:0xe4e4e4,
+        side: THREE.DoubleSide,
+        wireframe: false,
+        point:true
+      });
+
+        
+      teapot.getObjectByName('Tail').material = new THREE.MeshBasicMaterial({
+        color:0xd4d4d4,
+        side: THREE.DoubleSide,
+        wireframe: false,
+        point:true
+      });
+
+      teapot.getObjectByName('Gunn').material = new THREE.MeshBasicMaterial({
+        color:0xd4d4d4,
+        side: THREE.DoubleSide,
+        wireframe: false,
+        point:true
+      });
+    }
   }
+    
+  
 
   updateCamera() {
     camera.updateProjectionMatrix();
@@ -179,7 +270,10 @@ class MinMaxGUIHelper {
     this.obj[this.maxProp] = v;
     this.min = this.min;  // this will call the min setter
   }
+  
 }
+
+
 
 export { World };
 

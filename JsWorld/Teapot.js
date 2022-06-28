@@ -4,13 +4,6 @@ import { createSphere } from './Sphere.js';
 import { createCircleArray} from './CreateCircleArray.js';
 
 function createTeapot(scale = 1){
-    const teapot = new THREE.BufferGeometry();
-    const material = new THREE.MeshBasicMaterial({
-        color:0xffffff,
-        side: THREE.DoubleSide,
-        wireframe: true,
-        point:true
-    });
     const body = createSphere(2, 70, 30, 18, 0, false, 0, 0, 0, true, 0xc4c4c4);
     const head = createSphere(1.8, 30, 30, 10, 0, false, 0, 0, 0.5, false, 0xd4d4d4);
     const tophead = createSphere(0.5, 30, 30, 15, 0, false, 0, 0, 2.3, false, 0xe4e4e4);
@@ -19,8 +12,9 @@ function createTeapot(scale = 1){
     var tailY = [-3, 0, 2, -4];
     var gunnX = [0, 1, 3, 3];
     var gunnY = [0, 0, 0, 2.5];
-    const tail = createGun(0, 0.3, 0, 0, 0, true, 100, tailX, tailY, false);
-    const gunn = createGun(0, 2.5, 0, 0, 0, true, 100, gunnX, gunnY, true);
+    var group = new THREE.Object3D();
+    const tail = createGun(0, 0.3, 0, 0, 0, false, 100, tailX, tailY, false);
+    const gunn = createGun(0, 2.5, 0, 0, 0, false, 100, gunnX, gunnY, true);
     gunn.rotation.x = 1;
     gunn.rotation.y = 1.55;
     gunn.rotation.z += 6.6;
@@ -30,30 +24,33 @@ function createTeapot(scale = 1){
     tail.rotation.y += 1.55;
     tail.rotation.z += 1.55;
     tail.position.z -= 1.55;
-
     tail.scale.set(0.75, 0.75, 0.75);
-
-    const mesh = new THREE.Mesh(teapot, material);
-    mesh.add(body);
-    mesh.add(head);
-    mesh.add(tophead);
     // mesh.add(gun);
-    mesh.add(tail);
-    mesh.add(gunn);
-    mesh.rotation.set(Math.PI/2, Math.PI, Math.PI);
-    mesh.scale.set(0.7, 0.8, 1);
-    mesh.tick = () => 
-        Rotate(mesh);
-    return mesh;
+    
+    body.name = "Body";
+    head.name = "Head";
+    tophead.name = "TopHead";
+    tail.name = "Tail"
+    gunn.name = "Gunn";
+    group.add(tail);
+    group.add(gunn);
+    group.add(body);
+    group.add(head);
+    group.add(tophead);
+    group.rotation.set(Math.PI/2, Math.PI, Math.PI);
+    group.scale.set(0.7, 0.8, 1);
+    group.tick = () => 
+        Rotate(group);
+    return group;
 }
 
-function createGun(r1 = 0, r2 = 3, cx = 0, cy = 0, cz = 0, wireframe = true, step = 100, bezierX = [], bezierY = [], smaller = true){
+function createGun(r1 = 0, r2 = 3, cx = 0, cy = 0, cz = 0, wireframe = true, step = 100, bezierX = [], bezierY = [], smaller = true, color = 0xd4d4d4){
     var xu = 0.0 , yu = 0.0 , u = 0.0 ;
     var pxu = 0.0, pxy = 0.0;
     var u = 0 ;
     const Gun = new THREE.BufferGeometry();
     const material = new THREE.MeshBasicMaterial({
-        color:0xffffff,
+        color:0xd4d4d4,
         side: THREE.DoubleSide,
         wireframe: wireframe,
     });
