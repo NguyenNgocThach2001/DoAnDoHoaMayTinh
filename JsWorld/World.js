@@ -112,7 +112,7 @@ class World {
       positionY : 0,
       positionZ : 0,
       scaleX: 0.7,
-      scaleY: 0.8,
+      scaleY: 0.75,
       scaleZ: 1,
       near: 0.1,
       far: 2000,

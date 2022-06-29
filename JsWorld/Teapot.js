@@ -1,5 +1,4 @@
 export{createTeapot}
-import { createCylinder } from './Cylinder.js';
 import { createSphere } from './Sphere.js';
 import { createCircleArray} from './CreateCircleArray.js';
 
@@ -45,7 +44,7 @@ function createTeapot(cx = 0, cy = 0, cz = 0){
     group.add(head);
     group.add(tophead);
     group.rotation.set(Math.PI/2, Math.PI, Math.PI);
-    group.scale.set(0.7, 0.8, 1);
+    group.scale.set(0.7, 0.75, 1);
     group.position.set(cx, cy, cz);
     group.tick = () => 
         Rotate(group);
@@ -57,12 +56,19 @@ function createGun(r1 = 0, r2 = 3, cx = 0, cy = 0, cz = 0, wireframe = true, ste
     var pxu = 0.0, pxy = 0.0;
     var u = 0 ;
     const Gun = new THREE.BufferGeometry();
+    const texture = new THREE.TextureLoader().load('../Image/ComGa.jpg', 
+        function ( texture ) {
+            texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+            texture.offset.set( 0, 0 );
+            texture.repeat.set( 2, 2 );
+    } );
+   
     const material = new THREE.MeshPhongMaterial({
-        color:0xd4d4d4,
         side: THREE.DoubleSide,
         wireframe: wireframe,
+        map: texture 
     });
-    var vertices = [];
+     var vertices = [];
     for(u = 1/step ; u <= 1.0 ; u += 1/step) {
         var ou = u - 1/step;
         pxu = Math.pow(1-ou,3)*bezierX[0]+3*ou*Math.pow(1-ou,2)*bezierX[1]+3*Math.pow(ou,2)*(1-ou)*bezierX[2] + Math.pow(ou,3)*bezierX[3];
@@ -79,7 +85,9 @@ function createGun(r1 = 0, r2 = 3, cx = 0, cy = 0, cz = 0, wireframe = true, ste
     }
     Gun.setAttribute("position", new THREE.Float32BufferAttribute(vertices, 3));
     const mesh = new THREE.Mesh(Gun, material);
+    
     console.log(vertices);
+    
     return mesh;
 }
 
