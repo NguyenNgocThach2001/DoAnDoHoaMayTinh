@@ -22,7 +22,7 @@ THREE.Object3D.prototype.rotateAroundWorldAxis = function() {
 function createCube3() {
   const cubes = [];
   const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-  const material = new THREE.MeshBasicMaterial();
+  const material = new THREE.MeshPhongMaterial();
 
   for(let i = 0; i< 50; i++) {
     let px = Math.random() < 0.5 ? -1 : 1;

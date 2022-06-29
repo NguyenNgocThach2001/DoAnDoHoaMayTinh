@@ -2,7 +2,7 @@ export{createSphere}
 
 function createSphere(r=1, lats = 30, longs = 30, latss = 0, longss = 0, wireframe = true, cx= 0, cy = 0, cz = 0, lr = true, color = 0xffffff){
     const sphere = new THREE.BufferGeometry();
-    const material = new THREE.MeshBasicMaterial({
+    const material = new THREE.MeshPhongMaterial({
         color:color,
         side: THREE.DoubleSide,
         wireframe: wireframe,

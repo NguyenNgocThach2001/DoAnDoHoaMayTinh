@@ -2,7 +2,7 @@ export{createCone}
 
 function createCone(scale = 1, cx=0,cy=0,cz=0, r = 10, h = 10, step = 100) {
     const Cone = new THREE.BufferGeometry();
-    const material = new THREE.MeshBasicMaterial({
+    const material = new THREE.MeshPhongMaterial({
         color:0xffffff,
         side: THREE.DoubleSide,
         // wireframe: true,

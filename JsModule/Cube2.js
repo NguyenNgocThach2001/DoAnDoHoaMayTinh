@@ -7,7 +7,7 @@ let flippz = 1;
 function createCube2() {
   const cubes = [];
   const geometry = new THREE.BoxGeometry(1, 1, 1);
-  const material = new THREE.MeshBasicMaterial();
+  const material = new THREE.MeshPhongMaterial();
   for(let i = 0; i< 4; i++) {
     cubes.push(new THREE.Mesh(geometry, material));
     cubes[i].material.color.setHex( Math.random() * 0xffffff );

@@ -61,13 +61,13 @@ class Loop {
                 object.tick(delta, flip, FLIPP, this.updatables[1]);
         }
 
-        var p = new THREE.Vector3(0, 0, 0);
-        let px = Math.random() < 0.5 ? -1 : 1;
-        let py = Math.random() < 0.5 ? -1 : 1;
-        let pz = Math.random() < 0.5 ? -1 : 1;
-        var ax = new THREE.Vector3(0, 1, 0);
-        var ay = new THREE.Vector3(1, 0, 0);
-        var az = new THREE.Vector3(0, 0, 1);
+        // var p = new THREE.Vector3(0, 0, 0);
+        // let px = Math.random() < 0.5 ? -1 : 1;
+        // let py = Math.random() < 0.5 ? -1 : 1;
+        // let pz = Math.random() < 0.5 ? -1 : 1;
+        // var ax = new THREE.Vector3(0, 1, 0);
+        // var ay = new THREE.Vector3(1, 0, 0);
+        // var az = new THREE.Vector3(0, 0, 1);
         // if(FLIPP == 1)
         //     this.camera.rotateAroundWorldAxis(p,ax,1 * delta) ;
         // this.camera.rotateAroundWorldAxis(p,az,1 * delta) ;

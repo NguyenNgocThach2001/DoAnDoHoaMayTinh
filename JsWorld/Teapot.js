@@ -3,18 +3,27 @@ import { createCylinder } from './Cylinder.js';
 import { createSphere } from './Sphere.js';
 import { createCircleArray} from './CreateCircleArray.js';
 
-function createTeapot(scale = 1){
+function createTeapot(cx = 0, cy = 0, cz = 0){
     const body = createSphere(2, 70, 30, 18, 0, false, 0, 0, 0, true, 0xc4c4c4);
     const head = createSphere(1.8, 30, 30, 10, 0, false, 0, 0, 0.5, false, 0xd4d4d4);
     const tophead = createSphere(0.5, 30, 30, 15, 0, false, 0, 0, 2.3, false, 0xe4e4e4);
-    const gun = createCylinder(1, 0,3.8,0, 0.5, 1, 50, false);
     var tailX = [1, 2, 4, 3];
     var tailY = [-3, 0, 2, -4];
     var gunnX = [0, 1, 3, 3];
     var gunnY = [0, 0, 0, 2.5];
-    var group = new THREE.Object3D();
     const tail = createGun(0, 0.3, 0, 0, 0, false, 100, tailX, tailY, false);
     const gunn = createGun(0, 2.5, 0, 0, 0, false, 100, gunnX, gunnY, true);
+    body.geometry.computeFaceNormals();
+    body.geometry.computeVertexNormals();
+    head.geometry.computeFaceNormals();
+    head.geometry.computeVertexNormals();
+    tophead.geometry.computeFaceNormals();
+    tophead.geometry.computeVertexNormals();
+    tail.geometry.computeFaceNormals();
+    tail.geometry.computeVertexNormals();
+    gunn.geometry.computeFaceNormals();
+    gunn.geometry.computeVertexNormals();
+    var group = new THREE.Object3D();
     gunn.rotation.x = 1;
     gunn.rotation.y = 1.55;
     gunn.rotation.z += 6.6;
@@ -25,8 +34,6 @@ function createTeapot(scale = 1){
     tail.rotation.z += 1.55;
     tail.position.z -= 1.55;
     tail.scale.set(0.75, 0.75, 0.75);
-    // mesh.add(gun);
-    
     body.name = "Body";
     head.name = "Head";
     tophead.name = "TopHead";
@@ -39,6 +46,7 @@ function createTeapot(scale = 1){
     group.add(tophead);
     group.rotation.set(Math.PI/2, Math.PI, Math.PI);
     group.scale.set(0.7, 0.8, 1);
+    group.position.set(cx, cy, cz);
     group.tick = () => 
         Rotate(group);
     return group;
@@ -49,7 +57,7 @@ function createGun(r1 = 0, r2 = 3, cx = 0, cy = 0, cz = 0, wireframe = true, ste
     var pxu = 0.0, pxy = 0.0;
     var u = 0 ;
     const Gun = new THREE.BufferGeometry();
-    const material = new THREE.MeshBasicMaterial({
+    const material = new THREE.MeshPhongMaterial({
         color:0xd4d4d4,
         side: THREE.DoubleSide,
         wireframe: wireframe,

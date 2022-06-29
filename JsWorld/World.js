@@ -2,6 +2,7 @@ import { createCamera } from '../JsModule/Camera.js';
 import { createTeapot} from '../JsWorld/Teapot.js';
 import { createCube } from '../JsWorld/Cube.js';
 import { createSphere } from '../JsWorld/Sphere.js';
+import { createSpotLight } from '../JsWorld/spotlight.js';
 import { createCylinder } from '../JsWorld/Cylinder.js';
 import { createWheel} from '../JsWorld/Wheel.js';
 import { createCone } from '../JsWorld/Cone.js';
@@ -22,7 +23,7 @@ let controlsGUI;
 
 class World {
   constructor(container) {
-    camera = createCamera(35, 1, 0.1, 2000);
+    camera = createCamera(35, 1, 0.1, 2000, 60, 2, 0);
     scene = createScene();
     renderer = createRenderer();
     controls = new OrbitControls(camera, renderer.domElement);
@@ -30,12 +31,18 @@ class World {
     loop = new Loop(camera, scene, renderer, controls);
     container.append(renderer.domElement);
 
+    const plane = createPlane(0, 0, 0, 200, 200, Math.PI/2, Math.PI, Math.PI);
     const sphere = createSphere(5, 30, 30, 0, 0);
     const cube = createCube(5, 0, 0 , 0);
     const cone = createCone(1,0,30,0,5);
     const cylinder = createCylinder(1, 0, 0, 30 ,5);
-    const wheels = createWheel();
-    const teapot = createTeapot();
+    const wheels = createWheel(10, -70, 0, 0, false);
+    const teapot = createTeapot(1,2,1);
+    const spotLight1 = createSpotLight(-100, 20, 0, 50, 0.5, 0.4, true, 0xffffff);
+    spotLight1.target = teapot;
+    const spotLight = createSpotLight(0, 20, 0, 0, 1, 0.4, true, 0xffffff);
+    spotLight.target = teapot;
+
     // const cube1 = createCube1();
     // const cube2 = createCube();
     // const cube3 = createCube2();
@@ -48,6 +55,7 @@ class World {
     // loop.updatables.push(cube1);
     // loop.updatables.push(cube2);
     // loop.updatables.push(human);
+    loop.updatables.push(spotLight1);
     // for(let i = 0; i < 4; i++) {
     //   loop.updatables.push(cube3[i]);
     //   scene.add(cube3[i]);
@@ -67,12 +75,16 @@ class World {
     // scene.add(cube);
     // scene.add(cone);
     // scene.add(cylinder);
-    // scene.add(wheels);
+    scene.add(wheels);
     
-    this.createGUIDAT(teapot);
-    //loop.updatables.push(teapot);
+    this.createGUIDAT(teapot, wheels, spotLight, spotLight1, scene);
+    // loop.updatables.push(teapot);
     scene.add(teapot);
+    scene.add(plane);
+    scene.add(spotLight1);
+    scene.add(spotLight);
 
+    renderer.shadowMap.enabled = true;
     const resizer = new Resizer(container, camera, renderer);
     resizer.onResize = () => {
       this.render();
@@ -91,7 +103,7 @@ class World {
     loop.stop();
   }
 
-  createGUIDAT(teapot){
+  createGUIDAT(teapot, wheels, spotLight, spotLight1, scene){
     this.controlsGUI = {
       rotationX : 0,
       rotationY : 0,
@@ -105,6 +117,10 @@ class World {
       near: 0.1,
       far: 2000,
     };
+    var lightGUI = {
+      big: true,
+      moving: true,
+    }
     var displayModeGUI = {
       wireframe: false,
       solid: true
@@ -151,32 +167,62 @@ class World {
     });
     const minMaxGUIHelper = new MinMaxGUIHelper(camera, 'near', 'far', 0.1);
     gui.add(minMaxGUIHelper, 'min', 0.00001, 50, 0.00001).name('near').onChange(this.updateCamera);
-    gui.add(minMaxGUIHelper, 'max', 0.1, 50, 0.1).name('far').onChange(this.updateCamera);
+    gui.add(minMaxGUIHelper, 'max', 0.1, 2000, 0.1).name('far').onChange(this.updateCamera);
     var first = gui.addFolder("Display Mode");
-    var pos1 = first.add(displayModeGUI, 'wireframe').name('Wireframe').listen().onChange(function(){setChecked("wireframe"); setWireframe(teapot);});
-    var neg1 = first.add(displayModeGUI, 'solid').name('Solid').listen().onChange(function(){setChecked("solid"); setSolid(teapot);});
-    function setChecked(prop){
-      for (let param in displayModeGUI){
-        displayModeGUI[param] = false;
+    var second = gui.addFolder("Light On/Off");
+    second.add(lightGUI, 'big').name('Big Light').listen().onChange(function(){
+      if(lightGUI["big"]) {
+        lightGUI["big"] = true; 
+        scene.add(spotLight);
       }
-        displayModeGUI[prop] = true;
+      else {
+        lightGUI["big"] = false; 
+        scene.remove(spotLight); 
+      }
+    });
+
+    second.add(lightGUI, 'moving').name('Moving Light').listen().onChange(function(){
+      if(lightGUI["moving"]) {
+        lightGUI["moving"] = true; 
+        scene.add(spotLight1);
+      }
+      else {
+        lightGUI["moving"] = false; 
+        scene.remove(spotLight1); 
+      }
+    });
+
+    first.add(displayModeGUI, 'wireframe').name('Wireframe').listen().onChange(function(){setChecked("wireframe", displayModeGUI); setWireframe(teapot, wheels);});
+    first.add(displayModeGUI, 'solid').name('Solid').listen().onChange(function(){setChecked("solid", displayModeGUI); setSolid(teapot, wheels);});
+    function setChecked(prop, list){
+      for (let param in list){
+        list[param] = false;
+      }
+        list[prop] = true;
     }
-    function setWireframe(teapot) {
-      teapot.getObjectByName('Body').material = new THREE.MeshBasicMaterial({
+    function setWireframe(teapot, wheels) {
+      wheels.material = new THREE.MeshPhongMaterial({
+        color:0xffffff,
+        side: THREE.DoubleSide,
+        wireframe: true,
+        point:true
+      });
+
+      teapot.getObjectByName('Body').material = new THREE.MeshPhongMaterial({
         color:0xc4c4c4,
         side: THREE.DoubleSide,
         wireframe: true,
         point:true
       });
 
-      teapot.getObjectByName('Head').material = new THREE.MeshBasicMaterial({
+      teapot.getObjectByName('Head').material = new THREE.MeshPhongMaterial({
         color:0xd4d4d4,
         side: THREE.DoubleSide,
         wireframe: true,
         point:true
       });
 
-      teapot.getObjectByName('TopHead').material = new THREE.MeshBasicMaterial({
+      teapot.getObjectByName('TopHead').material = new THREE.MeshPhongMaterial({
         color:0xe4e4e4,
         side: THREE.DoubleSide,
         wireframe: true,
@@ -184,14 +230,14 @@ class World {
       });
 
         
-      teapot.getObjectByName('Tail').material = new THREE.MeshBasicMaterial({
+      teapot.getObjectByName('Tail').material = new THREE.MeshPhongMaterial({
         color:0xd4d4d4,
         side: THREE.DoubleSide,
         wireframe: true,
         point:true
       });
 
-      teapot.getObjectByName('Gunn').material = new THREE.MeshBasicMaterial({
+      teapot.getObjectByName('Gunn').material = new THREE.MeshPhongMaterial({
         color:0xd4d4d4,
         side: THREE.DoubleSide,
         wireframe: true,
@@ -199,22 +245,28 @@ class World {
       });
     }
   
-    function setSolid(teapot){
-      teapot.getObjectByName('Body').material = new THREE.MeshBasicMaterial({
+    function setSolid(teapot, wheels){
+      wheels.material = new THREE.MeshPhongMaterial({
+        color:0xffffff,
+        side: THREE.DoubleSide,
+        wireframe: false,
+        point:true
+      });
+      teapot.getObjectByName('Body').material = new THREE.MeshPhongMaterial({
         color:0xc4c4c4,
         side: THREE.DoubleSide,
         wireframe: false,
         point:true
       });
 
-      teapot.getObjectByName('Head').material = new THREE.MeshBasicMaterial({
+      teapot.getObjectByName('Head').material = new THREE.MeshPhongMaterial({
         color:0xd4d4d4,
         side: THREE.DoubleSide,
         wireframe: false,
         point:true
       });
 
-      teapot.getObjectByName('TopHead').material = new THREE.MeshBasicMaterial({
+      teapot.getObjectByName('TopHead').material = new THREE.MeshPhongMaterial({
         color:0xe4e4e4,
         side: THREE.DoubleSide,
         wireframe: false,
@@ -222,14 +274,14 @@ class World {
       });
 
         
-      teapot.getObjectByName('Tail').material = new THREE.MeshBasicMaterial({
+      teapot.getObjectByName('Tail').material = new THREE.MeshPhongMaterial({
         color:0xd4d4d4,
         side: THREE.DoubleSide,
         wireframe: false,
         point:true
       });
 
-      teapot.getObjectByName('Gunn').material = new THREE.MeshBasicMaterial({
+      teapot.getObjectByName('Gunn').material = new THREE.MeshPhongMaterial({
         color:0xd4d4d4,
         side: THREE.DoubleSide,
         wireframe: false,

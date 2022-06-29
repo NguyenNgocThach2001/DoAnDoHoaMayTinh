@@ -1,11 +1,12 @@
 export{createWheel}
 
-function createWheel(r=10, cx=0, cy=0, cz=0, step = 100, l = 3, r1 = 7, r2 = 6, r3 = 1, d = 3, d1 = 3){
+function createWheel(r=10, cx=0, cy=0, cz=0, wireframe = false, step = 100, l = 3, r1 = 7, r2 = 6, r3 = 1, d = 3, d1 = 3){
     const Cone = new THREE.BufferGeometry();
-    const material = new THREE.MeshBasicMaterial({
+    Cone.receiveShadow = true;
+    const material = new THREE.MeshPhongMaterial({
         color:0xffffff,
         side: THREE.DoubleSide,
-        wireframe: true,
+        wireframe: wireframe,
     });
     const vertices = [];
     
@@ -145,5 +146,8 @@ function createWheel(r=10, cx=0, cy=0, cz=0, step = 100, l = 3, r1 = 7, r2 = 6, 
     const b = vertices.map(function(x) {return x;});
     Cone.setAttribute("position", new THREE.Float32BufferAttribute(b, 3));
     const mesh = new THREE.Mesh(Cone, material);
+    mesh.position.set(cx, cy, cz);
+    mesh.geometry.computeFaceNormals();
+    mesh.geometry.computeVertexNormals();
     return mesh;
 }

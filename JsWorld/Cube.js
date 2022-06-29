@@ -2,7 +2,7 @@ export{createCube}
 
 function createCube(scale = 1, cx, cy, cz) {
     const Cube = new THREE.BufferGeometry();
-    const material = new THREE.MeshBasicMaterial({
+    const material = new THREE.MeshPhongMaterial({
         color:0xffffff,
         side: THREE.DoubleSide,
     });
