@@ -88,6 +88,27 @@ class World {
       solid: true
     };
 
+    var cameraGUI = {
+      positionX: 60,
+      positionY: 1,
+      positionZ: 0,
+      rotationX: 0,
+      rotationY: 0,
+      rotationZ: 0
+      
+    }
+
+    var textureGUI = {
+      Texture1: "../Image/Texture1.png",
+      Texture2: "../Image/Texture2.png",
+      Texture3: "../Image/Texture3.png",
+      Texturef1: false,
+      Texturef2: false,
+      Texturef3: false,
+    }
+
+
+
     const gui = new dat.GUI();
     gui.add(this.controlsGUI, 'rotationX', 0, 360).onChange(value => {
       teapot.rotation.x = this.convertDegToRad(value);
@@ -132,6 +153,21 @@ class World {
     gui.add(minMaxGUIHelper, 'max', 0.1, 2000, 0.1).name('far').onChange(this.updateCamera);
     var first = gui.addFolder("Display Mode");
     var second = gui.addFolder("Light On/Off");
+    var third = gui.addFolder("Camera");
+
+    third.add(cameraGUI, 'positionX', -100, 100).name('positionX').onChange(value => {
+      camera.position.x = value;
+      this.render();
+    });
+    third.add(cameraGUI, 'positionY', -100, 100).name('positionY').onChange(value => {
+      camera.position.y = value;
+      this.render();
+    });
+    third.add(cameraGUI, 'positionZ', -100, 100).name('positionZ').onChange(value => {
+      camera.position.z = value;
+      this.render();
+    });
+    var fourth = gui.addFolder("Texture");
     second.add(lightGUI, 'big').name('Big Light').listen().onChange(function(){
       if(lightGUI["big"]) {
         lightGUI["big"] = true; 
@@ -158,26 +194,51 @@ class World {
     first.add(displayModeGUI, 'solid').name('Solid').listen().onChange(function(){setChecked("solid", displayModeGUI); setSolid(teapot);});
     function setChecked(prop, list){
       for (let param in list){
-        list[param] = false;
+        if (typeof list[param] == "boolean") {
+          console.log(list[param]);
+          list[param] = false;
+        }
+        
       }
         list[prop] = true;
     }
     function setWireframe(teapot) {
       teapot.material = new THREE.MeshPhongMaterial({
-        color:0xffffff,
+        color:0xc4c4c4,
         side: THREE.DoubleSide,
         wireframe: true,
         point:true
       });
     }
   
+    fourth.add(textureGUI, 'Texturef1').name('Texture 1').listen().onChange(function(){
+      setChecked("Texturef1", textureGUI);
+      addTexture(textureGUI['Texture1'], teapot);
+    });
+    fourth.add(textureGUI, 'Texturef2').name('Texture 2').listen().onChange(function(){
+      setChecked("Texturef2", textureGUI);
+      addTexture(textureGUI['Texture2'], teapot);
+    });
+    fourth.add(textureGUI, 'Texturef3').name('Texture 3').listen().onChange(function(){
+      setChecked("Texturef3", textureGUI);
+      addTexture(textureGUI['Texture3'], teapot);
+    });
     function setSolid(teapot){
       teapot.material = new THREE.MeshPhongMaterial({
-        color:0xffffff,
+        color:0xc4c4c4,
         side: THREE.DoubleSide,
         wireframe: false,
         point:true
       });
+    }
+
+    function addTexture(path, object3D){
+      const texture1 = new THREE.TextureLoader().load(path);
+      const material1 = new THREE.MeshStandardMaterial({
+        map: texture1,
+        side: THREE.DoubleSide,
+      });
+      object3D.material = material1;
     }
   }
     
