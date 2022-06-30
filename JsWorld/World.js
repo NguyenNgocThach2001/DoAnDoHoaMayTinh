@@ -14,7 +14,7 @@ import { createRenderer } from '../JsModule/Renderer.js';
 import { Resizer } from '../JsModule/Resizer.js';
 import { createHuman} from './Human.js';
 import { createPlane} from './Plane.js';
-import { Loop} from '../JsModule/Loop.js';
+import { Loop} from '../JsModule/Loop1.js';
 import { OrbitControls } from 'https://unpkg.com/three@0.119.1/examples/jsm/controls/OrbitControls.js';
 
 let camera;
@@ -34,11 +34,6 @@ class World {
     loop = new Loop(camera, scene, renderer, controls);
     container.append(renderer.domElement);
 
-    const plane = createPlane(0, 0, 0, 200, 200, Math.PI/2, Math.PI, Math.PI);
-    const sphere = createSphere(5, 30, 30, 0, 0);
-    const cube = createCube(5, 0, 0 , 0);
-    const cone = createCone(1,0,30,0,5);
-    const cylinder = createCylinder(1, 0, 0, 30 ,5);
     const wheels = createWheel(10, -70, 0, 0, false);
     const teapot = createTeapot(1,-2,1);
     const spotLight1 = createSpotLight(-100, 20, 0, 50, 0.5, 0.4, true, 0xffffff);

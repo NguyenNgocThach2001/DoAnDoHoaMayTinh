@@ -24,16 +24,14 @@ let sumDelta = 0;
 let flip = 1;
 let p = 1;
 let FLIPP = 1;
-var rotation = false;
 
 class Loop {
-    constructor(camera, scene, renderer, controls, rotation = false) {
+    constructor(camera, scene, renderer, controls) {
         this.camera = camera;
         this.scene = scene;
         this.renderer = renderer;
         this.controls = controls;
         this.updatables = [];
-        this.rotation = rotation;
     }
 
     start() {
@@ -62,22 +60,19 @@ class Loop {
             if(object.tick != null)
                 object.tick(delta, flip, FLIPP, this.updatables[2]);
         }
-        
-        console.log(rotation);
-        if(rotation) {
-            var p = new THREE.Vector3(0, 0, 0);
-            let px = Math.random() < 0.5 ? -1 : 1;
-            let py = Math.random() < 0.5 ? -1 : 1;
-            let pz = Math.random() < 0.5 ? -1 : 1;
-            var ax = new THREE.Vector3(0, 1, 0);
-            var ay = new THREE.Vector3(1, 0, 0);
-            var az = new THREE.Vector3(0, 0, 1);
-            if(FLIPP == 1)
-                this.camera.rotateAroundWorldAxis(p,ax,1 * delta) ;
-            this.camera.rotateAroundWorldAxis(p,az,1 * delta) ;
-            if(FLIPP == 1)
-                this.camera.rotateAroundWorldAxis(p,ay,1 * delta) ;
-        }
+    
+        var p = new THREE.Vector3(0, 0, 0);
+        let px = Math.random() < 0.5 ? -1 : 1;
+        let py = Math.random() < 0.5 ? -1 : 1;
+        let pz = Math.random() < 0.5 ? -1 : 1;
+        var ax = new THREE.Vector3(0, 1, 0);
+        var ay = new THREE.Vector3(1, 0, 0);
+        var az = new THREE.Vector3(0, 0, 1);
+        if(FLIPP == 1)
+            this.camera.rotateAroundWorldAxis(p,ax,1 * delta) ;
+        this.camera.rotateAroundWorldAxis(p,az,1 * delta) ;
+        if(FLIPP == 1)
+            this.camera.rotateAroundWorldAxis(p,ay,1 * delta) ;
     }
 }
 export { Loop }
