@@ -56,17 +56,10 @@ function createGun(r1 = 0, r2 = 3, cx = 0, cy = 0, cz = 0, wireframe = true, ste
     var pxu = 0.0, pxy = 0.0;
     var u = 0 ;
     const Gun = new THREE.BufferGeometry();
-    const texture = new THREE.TextureLoader().load('../Image/ComGa.jpg', 
-        function ( texture ) {
-            texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-            texture.offset.set( 0, 0 );
-            texture.repeat.set( 2, 2 );
-    } );
    
     const material = new THREE.MeshPhongMaterial({
         side: THREE.DoubleSide,
         wireframe: wireframe,
-        map: texture 
     });
      var vertices = [];
     for(u = 1/step ; u <= 1.0 ; u += 1/step) {

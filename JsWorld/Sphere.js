@@ -2,17 +2,10 @@ export{createSphere}
 
 function createSphere(r=1, lats = 30, longs = 30, latss = 0, longss = 0, wireframe = false, cx= 0, cy = 0, cz = 0, lr = true, color = 0xffffff){
     const sphere = new THREE.BufferGeometry();
-    const texture = new THREE.TextureLoader().load('../Image/ComGa.jpg', 
-        function ( texture ) {
-            texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-            texture.offset.set( 0, 1 );
-            texture.repeat.set( 1, 1 );
-    } );
    
     const material = new THREE.MeshPhongMaterial({
         side: THREE.DoubleSide,
         wireframe: wireframe,
-        map: texture 
     });
     var vertices = [];
     var M_PI = Math.PI;
