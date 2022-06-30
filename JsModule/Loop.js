@@ -53,26 +53,26 @@ class Loop {
             flip = (flip + 6) % 8;
             FLIPP = - FLIPP;
         }
-            // console.log(sumDelta);
-            // console.log(flip);
+        // console.log(sumDelta);
+        // console.log(flip);
         this.controls.update();
         for (const object of this.updatables) {
             if(object.tick != null)
-                object.tick(delta, flip, FLIPP, this.updatables[1]);
+                object.tick(delta, flip, FLIPP, this.updatables[2]);
         }
 
-        // var p = new THREE.Vector3(0, 0, 0);
-        // let px = Math.random() < 0.5 ? -1 : 1;
-        // let py = Math.random() < 0.5 ? -1 : 1;
-        // let pz = Math.random() < 0.5 ? -1 : 1;
-        // var ax = new THREE.Vector3(0, 1, 0);
-        // var ay = new THREE.Vector3(1, 0, 0);
-        // var az = new THREE.Vector3(0, 0, 1);
-        // if(FLIPP == 1)
-        //     this.camera.rotateAroundWorldAxis(p,ax,1 * delta) ;
-        // this.camera.rotateAroundWorldAxis(p,az,1 * delta) ;
-        // if(FLIPP == 1)
-        //     this.camera.rotateAroundWorldAxis(p,ay,1 * delta) ;
+        var p = new THREE.Vector3(0, 0, 0);
+        let px = Math.random() < 0.5 ? -1 : 1;
+        let py = Math.random() < 0.5 ? -1 : 1;
+        let pz = Math.random() < 0.5 ? -1 : 1;
+        var ax = new THREE.Vector3(0, 1, 0);
+        var ay = new THREE.Vector3(1, 0, 0);
+        var az = new THREE.Vector3(0, 0, 1);
+        if(FLIPP == 1)
+            this.camera.rotateAroundWorldAxis(p,ax,1 * delta) ;
+        this.camera.rotateAroundWorldAxis(p,az,1 * delta) ;
+        if(FLIPP == 1)
+            this.camera.rotateAroundWorldAxis(p,ay,1 * delta) ;
     }
 }
 export { Loop }

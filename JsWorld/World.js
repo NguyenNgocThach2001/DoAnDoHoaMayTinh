@@ -1,4 +1,7 @@
 import { createCamera } from '../JsModule/Camera.js';
+import { createCube1 } from '../JsModule/Cube1.js';
+import { createCube2 } from '../JsModule/Cube2.js';
+import { createCube3 } from '../JsModule/Cube3.js';
 import { createTeapot} from '../JsWorld/Teapot.js';
 import { createCube } from '../JsWorld/Cube.js';
 import { createSphere } from '../JsWorld/Sphere.js';
@@ -37,50 +40,44 @@ class World {
     const cone = createCone(1,0,30,0,5);
     const cylinder = createCylinder(1, 0, 0, 30 ,5);
     const wheels = createWheel(10, -70, 0, 0, false);
-    const teapot = createTeapot(1,2,1);
+    const teapot = createTeapot(1,-2,1);
     const spotLight1 = createSpotLight(-100, 20, 0, 50, 0.5, 0.4, true, 0xffffff);
     spotLight1.target = teapot;
     const spotLight = createSpotLight(0, 20, 0, 0, 1, 0.4, true, 0xffffff);
     spotLight.target = teapot;
 
-    // const cube1 = createCube1();
-    // const cube2 = createCube();
-    // const cube3 = createCube2();
-    // const cube4 = createCube3();
-    // let human = createHuman();
-    // human.scale.set(0.05, 0.05 , 0.05);
-    // cube1.position.x += 2;
-    // cube1.rotation.set(0, 0, 0);
-    // cube2.rotation.set(0, 0, 0);
-    // loop.updatables.push(cube1);
-    // loop.updatables.push(cube2);
-    // loop.updatables.push(human);
+    const cube1 = createCube1();
+    const cube2 = createCube();
+    const cube3 = createCube2();
+    const cube4 = createCube3();
+    let human = createHuman();
+    human.scale.set(0.05, 0.05 , 0.05);
+    cube1.position.x += 2;
+    human.position.y -= 1;
+    cube1.rotation.set(0, 0, 0);
+    cube2.rotation.set(0, 0, 0);
+    loop.updatables.push(cube1);
+    loop.updatables.push(cube2);
     loop.updatables.push(spotLight1);
-    // for(let i = 0; i < 4; i++) {
-    //   loop.updatables.push(cube3[i]);
-    //   scene.add(cube3[i]);
-    // }
+    scene.add(teapot);
+    for(let i = 0; i < 4; i++) {
+      loop.updatables.push(cube3[i]);
+      scene.add(cube3[i]);
+    }
 
-    // for(let i = 0; i < 50; i++) {
-    //   loop.updatables.push(cube4[i]);
-    //   scene.add(cube4[i]);
-    // }
+    for(let i = 0; i < 50; i++) {
+      loop.updatables.push(cube4[i]);
+      scene.add(cube4[i]);
+    }
 
-
-    // scene.add(cube1);
-    // scene.add(cube2);
-    // scene.add(human);
-
-    // scene.add(sphere);
-    // scene.add(cube);
-    // scene.add(cone);
-    // scene.add(cylinder);
+    scene.add(cube1);
+    scene.add(cube2);
+    scene.add(human);
     scene.add(wheels);
     
     this.createGUIDAT(teapot, wheels, spotLight, spotLight1, scene);
-    // loop.updatables.push(teapot);
-    scene.add(teapot);
-    scene.add(plane);
+    
+    // scene.add(plane);
     scene.add(spotLight1);
     scene.add(spotLight);
 

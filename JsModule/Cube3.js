@@ -42,7 +42,7 @@ function createCube3() {
 
 function moveRightF(cube, delta, flip, FLIPP, centerCubeVector){
     // var p = new THREE.Vector3(0, 0, 0);
-    var p = centerCubeVector;
+    var p = new THREE.Vector3(0,-1,0);
     let px = Math.random() < 0.5 ? -1 : 1;
     let py = Math.random() < 0.5 ? -1 : 1;
     let pz = Math.random() < 0.5 ? -1 : 1;
