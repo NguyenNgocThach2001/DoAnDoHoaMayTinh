@@ -42,5 +42,7 @@ function createCylinder(scale = 1, cx=0,cy=0,cz=0, r = 10, h = 10, step = 100, w
     const b = vertices.map(function(x) {return x * scale;});
     Cylinder.setAttribute("position", new THREE.Float32BufferAttribute(b, 3));
     const mesh = new THREE.Mesh(Cylinder, material);
+    mesh.geometry.computeFaceNormals();
+    mesh.geometry.computeVertexNormals();
     return mesh;
 }
